@@ -1,23 +1,27 @@
-# A computer-assisted upper bound for the de Bruijn–Newman constant
+# de Bruijn–Newman upper bound
 
 Stefan Gordon
 
-[Read the paper (PDF)](output/pdf/dbn-upper-bound.pdf) ·
-[Paper source](manuscript/main.md) · [Verification guide](VERIFICATION.md)
+**[Read the paper (PDF)](output/pdf/dbn-upper-bound.pdf)** · [Paper source](manuscript/main.md) · [Verification guide](VERIFICATION.md)
 
-This repository accompanies the bound
-$$
-\Lambda \le
+Paper, exact certificates, reproducible computations, and a partial Lean 4
+formalization of the computer-assisted bound:
+
+```math
+\begin{aligned}
+\Lambda &\le
 \frac{3885632262767861213460393068710302759}
-     {24646172707879668706230182733520000000}
-=0.157656619095490606768\ldots<0.158.
-$$
+     {24646172707879668706230182733520000000} \\
+&= 0.157656619095490606768\ldots < 0.158.
+\end{aligned}
+```
 
-The argument uses the published
-Platt–Trudgian finite-RH theorem, new analytic estimates, and rigorous interval
-computations. The Lean companion checks the deduction **conditional on explicitly
-listed analytic inputs**. This is not a complete formal proof of the numerical
-bound, and the work has not undergone external peer review.
+The proof combines the published Platt–Trudgian finite-RH theorem with new
+analytic estimates and rigorous interval computations.
+
+> **Verification scope.** The Lean theorem is conditional on explicit analytic
+> inputs; this is not a complete formal proof of the numerical bound. The paper
+> has not undergone external peer review.
 
 ## Reproduce the numerical evidence
 
