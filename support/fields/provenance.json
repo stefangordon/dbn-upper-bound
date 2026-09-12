@@ -1,0 +1,53 @@
+{
+  "purpose": "Historical provenance only; no verifier reads this file.",
+  "origin": "Code and data authored in this repository's September 2026 mathematical work. See repository PROVENANCE.md and the preserved publication-preparation records.",
+  "adaptations": [
+    {
+      "published": "check_h7.py",
+      "original": "work/runs/20260908T140025Z-rh-expansion/restart-20260908T195425Z/heat-review/cosh1-review/review-h7-scalars.py",
+      "sha256": "b2fd7c189c16600cacb710eeb3181ea1bffab2f960ed883f32ebc8d48e9c296b",
+      "changes": "Local output CLI and optimization refusal; the scalar expressions and thresholds are unchanged."
+    },
+    {
+      "published": "check_m3a.py",
+      "original": "work/runs/20260908T140025Z-rh-expansion/restart-20260908T195425Z/heat-review/m3a-review/review-m3a-scalars.py",
+      "sha256": "0051717fba57369c3cb6b078270055207db579ad9f43f2ab44cb7ac35ae3a4d8",
+      "changes": "Read the local compact initial leaf data and canonical old-M3a-wall.json; remove adoption/freeze metadata as proof inputs; retain every original leaf, bottom and row gate."
+    },
+    {
+      "published": "check_fixed_c.py",
+      "original": "work/runs/20260908T140025Z-rh-expansion/restart-20260908T195425Z/heat-transport/root-jet-boundary-162-review-01/review-fixed-C-new-gates-01.py",
+      "sha256": "97e3ddf24b977dcebe977a317aa542d489e874272e500be88532f886f8ce22e8",
+      "changes": "Read local exact geometry and canonical wall; construct the same 400 rational initial cells from their formula; retain every interior, top, initial, head, profile and geometry gate."
+    },
+    {
+      "published": "check_early_boundary.py",
+      "original": "work/runs/20260908T140025Z-rh-expansion/restart-20260908T195425Z/relative-euler-early45-independent-review/checks/independent-relative-euler45-v2.py",
+      "sha256": "b5fe1594d9a3e3b8f880c6ee597bea846462026ec71b8eb5c67c6a9d2b122de2",
+      "changes": "Read compact exact local geometry, with its new digest; add explicit output CLI and optimization refusal; mathematical expressions are unchanged."
+    },
+    {
+      "published": "data/m3a-initial.json",
+      "original": "work/runs/20260908T140025Z-rh-expansion/restart-20260908T195425Z/heat-profile-certification/hpc-m3a-initial-check-01.json",
+      "sha256": "0b9d4ab5eae606133f4ffe669048457a7a05d4da06fc91f31a709e9b307c1d31",
+      "changes": "Remove unused diagnostic and author metadata; preserve all 855 exact leaves and their reference heights."
+    },
+    {
+      "published": "data/boundary-geometry.json",
+      "original": "work/runs/20260908T140025Z-rh-expansion/restart-20260908T195425Z/heat-review/signed-transport/sjt-fixed-C-boundary-boxes-11.json",
+      "sha256": "0cf0bfd5eacbcb75a897fad5bf72d19457c9015390ff7bf4ddcfdbe08f6c0646",
+      "changes": "Remove descriptive campaign/status fields; preserve every numeric parameter, all 162 exact boxes, and the canonical wall digest."
+    },
+    {
+      "published": "late_core.py",
+      "original": "work/runs/20260908T140025Z-rh-expansion/heat-moving/packets/P5-17129654/lead-density-banded-v2.py",
+      "sha256": "e0486d6115b610be168dbd4a75886059a2cbb36d371be48f133591182cd86044",
+      "changes": "Remove unused historical CLI, return Arb values directly instead of serializing and reparsing them, and explicitly check time-interval endpoint containment; all mathematical band, phase, divisor, integral, and derivative gates are retained."
+    }
+  ],
+  "new_files": {
+    "source.py": "Direct implementation of the common H7 point/full-disk bounds of Appendix A, using the conservative polynomial error 3e-9 and V7 on the low-Y band as well.",
+    "check_late_boundary.py": "Standalone full late-boundary replay combining the adapted raw core with the common H7 error, exact geometry, all-nine-wide-band Cauchy maximum and center-only quotient/jet bridge."
+  },
+  "validation": "All mathematical computations were replayed at Arb512: H7 scalars; 855 initial leaves; 1620 M3a rows and bottom cells; 400 fixed-C initial cells; 162 geometry boxes; 45 early source boxes; 117 late boxes with 1053 wide and 1053 center cutoff bands. No stored computational output is a proof input."
+}

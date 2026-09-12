@@ -1,0 +1,26 @@
+name: Lean kernel verification
+
+# Full kernel reduction has measured peaks near 15 GiB. Use a dedicated runner
+# with at least 32 GiB; ordinary numerical CI makes no claim to run this job.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lean:
+    runs-on: [self-hosted, linux, dbn-lean]
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - name: Check release integrity and generated data
+        run: |
+          python3 scripts/manifest.py
+          python3 lean/scripts/gen_data.py --check
+      - name: Build the pinned toolchain and check the stated theorems
+        working-directory: lean
+        run: |
+          lake exe cache get
+          lake build
+          lake env lean Audit.lean

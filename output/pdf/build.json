@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "sources": {
+    "manuscript/main.md": "d7d6eb460134427ebac3b4da361b1eacbf5fae97868db42acac280e051e6a00d",
+    "manuscript/analytic-estimates.md": "623bb30de8cd4495390cf46b81e6b7ce42bc0556cf979c5bce51d469ed0ebf6f",
+    "manuscript/computational-estimates.md": "4bbc7e7f7a05f5adf4d137fe00a692cefc09d71cdf0d58b8b23fb5c26186378e",
+    "manuscript/source-boxes.md": "eb4d1f65ef378378dd2058f02d4aeb86f662a7ca4104c5aa6ea0d563e6ab8516",
+    "manuscript/references.md": "bc5a2a18c5602f4daf2c2353e34852dfb9abf2c883d4d07397f1271604fa2e90",
+    "manuscript/preamble.tex": "fdee012ec2240e4e5dc6c1afb3e57190bf5442c77826e457158c36ba05c7378a",
+    "scripts/build_paper.py": "56313977c6613f87c843770872e251e84b486871d47fd8b17fbb76033fdd0d74"
+  },
+  "pdf_sha256": "703650232141012f90f9b8b2c22b5dd11e597fd6f8acd9f09ad02aadced96a37",
+  "pandoc": "pandoc 3.7.0.2",
+  "lualatex": "This is LuaHBTeX, Version 1.22.0 (TeX Live 2025/Debian)",
+  "layout_warnings": []
+}

@@ -1,0 +1,53 @@
+{
+  "complete": true,
+  "terms": 690950,
+  "entries": 3844,
+  "generator_bits": 192,
+  "reduction_bits": 256,
+  "generator_sha256": "0d924c69547ba59a82c9252e060ac409ed695dad52cdd29efe12b088a799e926",
+  "matrix_sha256": "f882ae93137189c786f8f3355672be3a7671effe16d3be3e069cb3e6c672d218",
+  "partitions": [
+    [
+      1,
+      86368
+    ],
+    [
+      86369,
+      172737
+    ],
+    [
+      172738,
+      259106
+    ],
+    [
+      259107,
+      345475
+    ],
+    [
+      345476,
+      431843
+    ],
+    [
+      431844,
+      518212
+    ],
+    [
+      518213,
+      604581
+    ],
+    [
+      604582,
+      690950
+    ]
+  ],
+  "elapsed_seconds": 34.796412404000876,
+  "compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+  "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+  "python_flint": "0.9.0",
+  "python_flint_backend": "3.6.0",
+  "native_packages": [
+    "libflint-dev\t3.0.1-3.1build1",
+    "libgmp-dev:amd64\t2:6.3.0+dfsg-2ubuntu6.1",
+    "libmpfr-dev:amd64\t4.2.1-1build1.1"
+  ]
+}

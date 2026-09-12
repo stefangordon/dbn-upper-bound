@@ -1,0 +1,24 @@
+# Local environments and compiled dependencies
+.venv/
+__pycache__/
+.ruff_cache/
+.pytest_cache/
+*.py[cod]
+lean/.lake/
+
+# Reproduction and typesetting scratch space
+build/
+tmp/
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+
+# Keep final PDFs, but not QA page images or release staging copies
+output/pdf/*.png
+dist/
+core
+core.*

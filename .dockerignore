@@ -1,0 +1,13 @@
+.git
+**/.lake
+**/.venv
+**/__pycache__
+**/.ruff_cache
+**/.pytest_cache
+**/*.pyc
+build
+tmp
+dist
+output/pdf/*.png
+core
+core.*

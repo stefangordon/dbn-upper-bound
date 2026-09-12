@@ -1,0 +1,22 @@
+name: Numerical verification
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  numerical:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - name: Build the reproduction environment
+        run: docker build --tag dbn-verification .
+      - name: Check every numerical component, regenerating the finite-sum matrix
+        run: docker run --rm dbn-verification --regenerate
+      - name: Check adversarial rejection tests
+        run: docker run --rm --entrypoint python dbn-verification -m unittest discover -s tests -v
