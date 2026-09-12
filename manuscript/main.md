@@ -346,7 +346,9 @@ The manuscript, source code, exact certificates, and reproduction instructions a
 
 The classical inputs are cited published theorems. The new analytic estimates are conventional proofs in the supplements, with rigorous finite computations furnishing their explicit inequalities. The Lean companion verifies the deduction from stated analytic inputs, including the concrete heat integral, zero dynamics, kernel inequalities, barrier calculus, and first-contact argument. Its main theorem remains conditional on those inputs.
 
-The remaining formal inputs concern the finite head, density and jet comparisons, source floors, and profile gates not fully discharged in Lean. Confinement can instead be supplied through the precise published positive-time tail statement. Proved profile monotonicity and time-cell transfer lemmas connect P8 to the quantities used by the barrier. Selected difficult P8 gates are checked in Lean; this is not full Lean coverage of P8.
+Every P8 endpoint gate is kernel-checked using a proved rational evaluator. Finite-head propagation is proved from the time-zero finite-RH input and vertical boundary non-vanishing; neither input is thereby proved.
+
+An alternative interface assumes the residual estimate and nonzero normalizer of Lemma A.1, finite RH at time zero, the continuous lower bound $|f^{[N]}(X+iy)|>1/500$, source floors, and density/jet comparisons. Lean derives the required confinement and finite head from these inputs. The continuous bound is not a Lean-checked grid: the polynomial computation and its Taylor-error bridge remain unformalized. Auxiliary zeta and finite heat-sum identities are proved, but the remaining analytic inputs are not. The published positive-time tail statement provides an alternative confinement input.
 
 For the main theorem, Lean reports only its standard foundational axioms: propositional extensionality, classical choice, and quotient soundness. This report does not prove the theorem's explicit hypotheses.
 
@@ -358,7 +360,7 @@ python3.12 -m venv .venv
 .venv/bin/python verify.py --regenerate
 ~~~
 
-The last command requires a C compiler and the FLINT development library. The supplied Dockerfile provides the supported CPython 3.12 environment. It regenerates the finite-sum boundary matrix, checks all 800,000 boundary cells, recomputes all 26 source floors and the density/jet support, and checks the compact barrier and P8 with two arithmetic libraries. Each independent late boundary box is checked in a fresh process. The explicit quick mode runs only finite barrier/profile checks.
+The supplied Dockerfile provides CPython 3.12, a C compiler, and FLINT headers. This command regenerates the boundary matrix and runs all numerical checks, including every boundary cell, source box, field estimate, and both P8 arithmetic backends. Late boundary boxes run in separate processes. The explicit quick mode omits the supporting computations.
 
 To check the formal companion:
 

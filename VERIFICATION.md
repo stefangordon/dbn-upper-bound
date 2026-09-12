@@ -59,27 +59,58 @@ lake env lean Audit.lean
 
 Lean 4.33.1, mathlib v4.33.1, and leancert revision
 `4ea18bb66dfcd7f18f260bc25302400f5a3cafd7` are pinned in the Lake files.
-The audit fixes the numerical constant as well as the theorem name, prints the
-premise structures, and rejects non-kernel proof dependencies in 14 principal
-declarations. Its permitted foundational axioms are `propext`,
-`Classical.choice`, and `Quot.sound`.
+The audit pins the literal bound, the original four-input premise constructor
+and the headline theorem types. It prints the actual hypotheses and rejects
+non-kernel proof dependencies in 27 principal declarations. Its permitted
+foundational axioms are `propext`, `Classical.choice` and `Quot.sound`.
 
-The formal development includes the complete rational barrier certificate,
-barrier calculus, kernel inequalities, zero dynamics, first contact, the terminal
-strip contraction, and exact profile/domain transfer. It checks four difficult
-P8 gates: density rows 1251 and 3356, and jet rows 3356 and 5845. It also disproves
-the erroneous extra-subtraction condition formerly printed for row 3356.
-This limited numerical module does not establish all of P8.
+The formal development includes the rational barrier certificate, barrier
+calculus, kernel inequalities, zero dynamics, first contact, terminal strip
+contraction and profile/domain transfer. Every P8 gate is now proved by
+`lean/DBN/GateChecker.lean`: its rational evaluator has a proved enclosure
+theorem, and the kernel evaluates its Boolean gates on both frozen barriers.
+This includes all 7849 unique density floors and 6317 unique signed jet
+ceilings, plus their reused main-row occurrences. Four difficult gates remain
+separately checked through leancert's interval evaluator, together with the
+counterexample to the formerly printed extra-subtraction condition.
 
-The finite-head theorem, effective approximation, density/jet comparisons,
-source-floor theorem, and all remaining P8 inequalities have not been proved in
-Lean. Neither has the cited Polymath positive-time tail theorem; its confinement
-corollary is formalized.
+`DBN.head_of_finiteRH` proves finite-head propagation from the time-zero
+real-zero input and vertical boundary nonvanishing. The normalization is
+`H₀(z) = ξ((1+iz)/2)/8`; the zeta ordinate cutoff corresponding to
+`|Re z| ≤ X` is `X/2 = 2999673670750`, not `X`.
+The original `RemainingPremises.head` field is preserved, while the
+approximation interface supplies it through this new theorem.
 
-Use at least 32 GiB RAM for the complete Lean build. The rational-certificate
-check reached roughly 15 GiB during preparation. The numerical GitHub workflow
-runs on an ordinary hosted runner. The separate manual Lean workflow requires
-a provisioned runner labelled `dbn-lean`, with elan and Python installed.
+`EnlargedApproximation` collects the residual estimate and nonzero normalizer
+from Lemma A.1; this proposition is **not proved in Lean**.
+`BoundaryMainTermBound` is an assumed lower bound for the finite-sum
+approximation at every point of the continuous boundary rectangle. It is
+**not a formalized grid certificate**: both the polynomial calculation (C8)
+and its error bridge (C7) remain to be formalized. Lean proves a scalar error
+bound below `1/500` and derives boundary nonvanishing from these two assumptions.
+
+The exact positive-time confinement needed by the barrier is proved from
+`EnlargedApproximation`, using a coarse reflected-coefficient estimate proved
+from its definitions. This covers zeros of height at least `1/40` and does not
+formalize the full Polymath real-zero tail theorem.
+
+Auxiliary source lemmas prove an Euler-product lower bound, the termwise
+common-phase inequality, a Dirichlet-series representation with a value
+modulus bound, and the finite heat identity (C13) with remainder norm bounds.
+They do not establish the complete uniform source-floor theorem, derivative
+estimates or numerical source gates.
+
+The approximation interface still assumes the enlarged approximation, finite
+RH at time zero, the continuous boundary main-term bound, source floors and
+analytic density/jet comparisons. The [Lean guide](lean/README.md) gives their
+exact interfaces. A shorter list of names is not evidence that these remaining
+analytic obligations have disappeared.
+
+Use at least 32 GiB RAM for the complete Lean build. The rational certificate
+reached roughly 15 GiB during preparation. The full P8 reduction is another
+substantial computation; budget approximately 40 minutes. The numerical GitHub
+workflow runs on a hosted runner. The separate manual Lean workflow requires a
+provisioned runner labelled `dbn-lean`, with elan and Python installed.
 
 ## Trust boundaries
 

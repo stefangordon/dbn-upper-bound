@@ -12,12 +12,18 @@ import DBN.Hermite
 import DBN.PairSum
 import DBN.Confinement
 import DBN.FieldTransfer
+import DBN.GateChecker
+import DBN.Head
+import DBN.Approximation
+import DBN.ConfineApprox
+import DBN.GammaEstimate
 
 /-!
 # Main theorem
 
 `Λ ≤ bound` from the **remaining** analytic premises (`RemainingPremises`): positive-time confinement,
-the finite head, the source floors and the field floors. Everything else is a theorem:
+the finite head, the source floors and the field floors. This preserves the original
+`RemainingPremises` interface. More explicit interfaces below expose proved reductions.
 
 * the tail premises (de Bruijn contraction, `Λ > −∞`), the strip, the symmetries, closedness of the
   zero set and `H₀ = ξ` come from leancert (`DBN.External`);
@@ -31,7 +37,16 @@ the finite head, the source floors and the field floors. Everything else is a th
   differentiable zero branch through a simple zero with its exact velocity `H''/H'` in `DBN.ZeroBranch`
   (implicit function theorem), the backward Hermite splitting at a multiple zero in `DBN.Hermite`
   (double expansion under the heat integral + Hurwitz), and the pair-sum force laws in `DBN.PairSum`
-  (leancert's Hadamard zero sum, paired over conjugate indices into the kernels of `DBN.Kernels`).
+  (leancert's Hadamard zero sum, paired over conjugate indices into the kernels of `DBN.Kernels`);
+* the propagation of the finite head in time is proved in `DBN.Head`: from `FiniteRH` at
+  `t = 0` (zeta ordinate cutoff `X/2`) and nonvanishing on `X + i[0,1]`, zeros with `|Re| ≤ X` stay real
+  on `[0, 1/5]` (argument principle for `H_t` in `DBN.ZeroCount`, real-rootedness of the model
+  polynomials in `DBN.HermiteRoots`, forward Hermite splitting in `DBN.HermiteForward`);
+* the residual bound and nonzero normalizer from Lemma A.1 are collected as the unproved
+  `DBN.EnlargedApproximation` proposition. From it, the required positive-time confinement
+  is proved (`DBN.ConfineApprox`, with `DBN.GammaEstimate`). Boundary nonvanishing additionally
+  needs `DBN.BoundaryMainTermBound`, a continuous lower-bound assumption, not a formal grid check.
+  The approximation interface also requires finite RH, source floors and analytic P4/P5.
 -/
 
 namespace DBN
@@ -53,16 +68,15 @@ theorem confine_of_polymathPositiveTimeRealTail (hP : PolymathPositiveTimeRealTa
   confinement_of_polymathPositiveTimeRealTail hP (by exact_mod_cast τ0_pos)
     (by norm_num [Const.Tstar]) (by norm_num)
 
-/-- The remaining analytic premises: exactly the not-yet-formalized inputs P2, P3, P4/P5/P8 and P7, stated
-over the concrete `H_t` for the time range `[τ₀, T*]` of the reference barrier (which contains `[3/50, T]`).
-These are explicit hypotheses, not axioms. `ProfileRemainingPremises` separates P4/P5 from the exact
-P8 endpoint gates, and `confine_of_polymathPositiveTimeRealTail` supplies P3 from a precisely named
-literature proposition. The analytic finite-head/source/field comparisons and the complete P8 list
-remain unproved in this development. -/
+/-- Original analytic interface, preserved with its full P2 `head` field.
+These are explicit hypotheses, not axioms. `ProfileRemainingPremises` separates the analytic
+P4/P5 comparisons from the now-proved P8 gates. The approximation interface derives this
+head field using `head_of_finiteRH` rather than replacing it with stronger inputs under
+the same structure name. Source and analytic field comparisons remain unproved. -/
 structure RemainingPremises : Prop where
   /-- P3: positive-time confinement on `[τ₀, T*]`. -/
   confine : ∃ R : ℝ, ∀ t ∈ Icc (τ0 : ℝ) (Const.Tstar : ℝ), ∀ z : ℂ, H t z = 0 → 1 / 40 ≤ |z.im| → |z.re| ≤ R
-  /-- P2: finite head. -/
+  /-- P2: the complete finite-head statement, unchanged from the published interface. -/
   head : ∀ t ∈ Icc (0 : ℝ) (1 / 5), ∀ z : ℂ, H t z = 0 → |z.re| ≤ Const.X → z.im = 0
   /-- P7: source floors for the 26 boxes used by the main rows. -/
   sourceFloor : ∀ r ∈ Data.mainRows, ∀ c : SourceCert, r.cert = .source c → ∀ x : ℝ, (Const.X : ℝ) ≤ x →
@@ -74,18 +88,19 @@ structure RemainingPremises : Prop where
       (c.signed = true → J x c.p t ≤ c.c)
 
 /-- An alternative, more explicit input boundary: the analytic P4/P5 field
-comparisons and the exact P8 endpoint gates are separate. Full P8 and the
-analytic finite-head/source/field comparisons remain parameters. -/
+comparisons on their moving-wall domains. The exact P8 endpoint gates are a
+theorem (`Profile.profileCellGates_proved`, kernel-evaluated for every field
+certificate of both barriers), so they no longer appear here. The original finite-head
+field is preserved and can be supplied by `head_of_finiteRH` from its two inputs.
+The source/field comparisons remain parameters. -/
 structure ProfileRemainingPremises : Prop where
-  /-- P2: finite head. -/
+  /-- P2: the complete finite-head statement. -/
   head : ∀ t ∈ Icc (0 : ℝ) (1 / 5), ∀ z : ℂ, H t z = 0 → |z.re| ≤ Const.X → z.im = 0
   /-- P7: source floors. -/
   sourceFloor : ∀ r ∈ Data.mainRows, ∀ c : SourceCert, r.cert = .source c → ∀ x : ℝ, (Const.X : ℝ) ≤ x →
     ∀ t ∈ Icc (c.btl : ℝ) c.btr, ∀ h ∈ Icc (c.hlo : ℝ) c.hhi, (c.L : ℝ) ≤ V x h t
   /-- P4/P5 over their original moving-wall domains. -/
   fields : Profile.DensityJetFields
-  /-- All P8 point gates, including reused main-row certificates. -/
-  cells : Profile.ProfileCellGates
 
 /-- The explicit source, profile and literature interfaces imply every field
 of the original main theorem's premise, without changing its statement. -/
@@ -94,7 +109,7 @@ theorem remainingPremises_of_polymath_and_profiles (hP : PolymathPositiveTimeRea
   confine := confine_of_polymathPositiveTimeRealTail hP
   head := P.head
   sourceFloor := P.sourceFloor
-  fieldFloor := Profile.fieldFloor_of_profiles P.fields P.cells
+  fieldFloor := Profile.fieldFloor_of_profiles P.fields Profile.profileCellGates_proved
 
 theorem ZeroDynamics.mono {t0 T t0' T' : ℝ} (h : ZeroDynamics t0 T) (h1 : t0 ≤ t0') (h2 : T' ≤ T) :
     ZeroDynamics t0' T' :=
@@ -302,6 +317,37 @@ tail proposition and field floors discharged from P4/P5 and the P8 gates. -/
 theorem lambda_le_bound_of_polymath_and_profiles (hP : PolymathPositiveTimeRealTail)
     (P : ProfileRemainingPremises) : Lambda ≤ (Const.bound : ℝ) :=
   lambda_le_bound_of_remaining (remainingPremises_of_polymath_and_profiles hP P)
+
+/-- The approximation-based input boundary: `EnlargedApproximation`, finite RH with
+zeta ordinate cutoff `X/2`, a continuous main-term lower bound, source floors and analytic P4/P5.
+Positive-time confinement (`DBN.confine_of_approximation`) and the boundary certificate
+(`DBN.boundaryNonvanishing_of_approximation`) are theorems from these; no literature tail theorem
+is used. -/
+structure ApproximationPremises : Prop where
+  /-- P3b: manuscript Lemma A.1. -/
+  approx : EnlargedApproximation
+  /-- P2 at `t = 0`; the zeta ordinate cutoff is `X/2`. -/
+  finiteRH : FiniteRH
+  /-- Continuous main-term bound; the finite numerical certificate is not formalized. -/
+  boundaryMainTerm : BoundaryMainTermBound
+  /-- P7: source floors. -/
+  sourceFloor : ∀ r ∈ Data.mainRows, ∀ c : SourceCert, r.cert = .source c → ∀ x : ℝ, (Const.X : ℝ) ≤ x →
+    ∀ t ∈ Icc (c.btl : ℝ) c.btr, ∀ h ∈ Icc (c.hlo : ℝ) c.hhi, (c.L : ℝ) ≤ V x h t
+  /-- P4/P5 over their original moving-wall domains. -/
+  fields : Profile.DensityJetFields
+
+/-- The approximation interface implies every field of the original premise. -/
+theorem remainingPremises_of_approximation (P : ApproximationPremises) : RemainingPremises where
+  confine := confine_of_approximation P.approx (by exact_mod_cast τ0_pos)
+    (by norm_num [Const.Tstar])
+  head := head_of_finiteRH P.finiteRH
+    (boundaryNonvanishing_of_approximation P.approx P.boundaryMainTerm)
+  sourceFloor := P.sourceFloor
+  fieldFloor := Profile.fieldFloor_of_profiles P.fields Profile.profileCellGates_proved
+
+/-- **Main theorem, approximation interface.** -/
+theorem lambda_le_bound_of_approximation (P : ApproximationPremises) : Lambda ≤ (Const.bound : ℝ) :=
+  lambda_le_bound_of_remaining (remainingPremises_of_approximation P)
 
 /-- Decimal comparison: the bound is below `79/500 = 0.158`. -/
 theorem lambda_lt_79_500 (P : RemainingPremises) : Lambda < 79 / 500 := by

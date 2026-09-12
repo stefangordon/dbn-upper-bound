@@ -18,3 +18,14 @@ import DBN.Confinement
 import DBN.Profile
 import DBN.FieldTransfer
 import DBN.ProfileChecks
+import DBN.GateChecker
+import DBN.ZeroCount
+import DBN.HermiteRoots
+import DBN.HermiteForward
+import DBN.Head
+import DBN.Approximation
+import DBN.ConfineApprox
+import DBN.GammaEstimate
+import DBN.ZetaBounds
+import DBN.VonMangoldtSeries
+import DBN.HeatIdentity

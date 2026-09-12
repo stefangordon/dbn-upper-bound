@@ -1,129 +1,177 @@
 # Lean 4 formalization
 
-The headline theorem is conditional:
+The headline theorem remains conditional:
 
-```lean
+~~~lean
 DBN.lambda_le_bound_of_remaining :
   DBN.RemainingPremises → DBN.Lambda ≤ (DBN.Const.bound : ℝ)
-```
+~~~
 
-The bound is the exact rational
+The exact bound is
 `3885632262767861213460393068710302759 / 24646172707879668706230182733520000000`.
-Lean has **not** proved the conclusion without analytic premises.
+Lean has **not** proved this bound without analytic inputs.
 
-An additional theorem, `DBN.lambda_le_bound_of_polymath_and_profiles`, exposes a more detailed
-boundary. It takes the explicitly named Polymath real-zero tail proposition and
-`ProfileRemainingPremises`: the finite head (P2), source floors (P7), analytic
-density/jet field comparisons (P4/P5), and all numerical endpoint gates (P8).
-Lean proves that these imply every field of the original `RemainingPremises`.
+## The three interfaces
+
+| Interface | Explicit inputs |
+|---|---|
+| `lambda_le_bound_of_remaining` | Positive-time confinement, the full finite head, source floors, field floors |
+| `lambda_le_bound_of_polymath_and_profiles` | The named Polymath tail proposition; finite head, source floors, analytic density/jet comparisons |
+| `lambda_le_bound_of_approximation` | Enlarged approximation, finite RH at time zero, continuous boundary main-term lower bound, source floors, analytic density/jet comparisons |
+
+The original four-field `RemainingPremises` structure is preserved. Its
+`head` field still states the whole finite-head conclusion, rather than a
+stronger replacement hypothesis. The second interface retains that head input
+and removes the formerly assumed P8 gates because they are now proved.
+The third interface derives the head and confinement from more explicit inputs.
+
+[Audit.lean](Audit.lean) checks the original premise constructor as well as
+the headline theorem types and literal rational constant. Merely retaining a
+theorem name while strengthening its hypotheses would not pass this audit.
 
 ## Reproduce
 
 From this directory:
 
-```bash
+~~~sh
 python3 scripts/gen_data.py --check
 lake exe cache get
 lake build
 lake env lean Audit.lean
-```
+~~~
 
-Lean is pinned to `leanprover/lean4:v4.33.1`; mathlib to `v4.33.1`; leancert to
-commit `4ea18bb66dfcd7f18f260bc25302400f5a3cafd7` in the lockfile.
-The first build compiles leancert's analysis and interval libraries from source.
-The full rational certificate is deliberately checked by kernel reduction and
-takes minutes: 754 seconds (12.6 minutes) on the preparation machine for this
-publication update. It is not a seconds-long smoke test.
+Lean `leanprover/lean4:v4.33.1`, mathlib `v4.33.1`, and leancert revision
+`4ea18bb66dfcd7f18f260bc25302400f5a3cafd7` are pinned.
+Use at least 32 GiB RAM. The rational barrier certificate took about 13 minutes
+and reached roughly 15 GiB during preparation. The full P8 reduction is another
+substantial computation; budget approximately 40 minutes. Cached builds are not
+fresh re-evaluations of those certificates.
 
 The generator reads only [barriers.json](../certificate/data/barriers.json).
-`--check` writes nothing and compares all 30 generated files byte for byte.
-During preparation, a separate migration comparison established that data
-normalization preserved every declaration byte before the provenance headers
-were updated. The published checker compares the complete files.
+Its `--check` compares all 30 generated files byte for byte, without writing.
+Normalization of the earlier certificate preserved every mathematical
+declaration; only provenance headers changed.
 
-## What is proved
+## What is kernel-checked
 
-The main theorem uses the following kernel-checked components:
+- All rational row gates, joins, wall and catalog conditions, and endpoints
+  for the 4,817 main and 7,849 reference rows.
+- Barrier calculus, force/kernel inequalities and the first-contact argument.
+- Simple-zero branches, backward splitting at multiple zeros and paired
+  zero-sum force laws, assembled as `DBN.zeroDynamics_proved`.
+- The concrete-integral bridge to pinned leancert, supplying strip contraction,
+  initial strip, symmetry, continuity, the xi identity, and boundedness below
+  of real-zero times.
+- The explicit profile formulas, positivity and time monotonicity of `U`
+  and `f0 = UY/U`, the subtraction budget and whole-cell transfer.
+- Every P8 endpoint inequality, including all reused main-row certificates.
+- Finite-head propagation from a time-zero real-zero input and vertical
+  boundary nonvanishing.
+- The boundary error threshold and required positive-time confinement,
+  conditional on the enlarged approximation and the other inputs shown above.
+- Auxiliary zeta, finite heat-sum and remainder identities described below.
 
-- The exact rational row gates, chain joins, endpoints, wall and source-catalog
-  checks for the 4,817 main rows and 7,849 reference rows.
-- Piecewise affine barrier calculus, the force inequalities and kernel
-  minorants, and the first-contact comparison, including strict entry of the
-  main barrier from the reference barrier at the cushion time.
-- The differentiable branch through a simple zero, backward Hermite splitting
-  at a multiple zero, and the pair-sum force laws. Together these prove
-  `DBN.zeroDynamics_proved`.
-- The lower bound for `Omega`.
-- Through the proved definition bridge to pinned
-  [leancert](https://github.com/alerad/leancert/tree/4ea18bb66dfcd7f18f260bc25302400f5a3cafd7/LeanCert/Analysis/DBN):
-  de Bruijn strip contraction, boundedness below of real-zero times, the
-  initial strip, symmetry, joint continuity, and the xi-function identity.
-- The explicit profile formulas, positivity and time monotonicity of `U`,
-  time monotonicity of `f0 = UY/U` at nonnegative height, the uniform subtraction
-  budget, and the whole-cell jet ceiling.
-- The rational wall geometry and the precise transfer from P4/P5 and the P8
-  endpoint gates to the complete `fieldFloor` premise, for every old cell used.
+### Complete P8 certificate
 
-The P8 density gate is exactly `s + 1/100000 < f0 p tl`. Combining it with
-`delta t < 1/100000` and P4, `S ≥ f0 - delta`, gives `S > s`.
-No monotonicity of `fM = f0 - delta` is required.
+[GateChecker.lean](DBN/GateChecker.lean) implements a rational fixed-point
+evaluator for `exp`, `cosh` and `sinh`: 20 Taylor terms on `x/64`, six
+squarings, and directional rounding to multiples of `2⁻¹⁰⁰`. Its enclosure
+and gate-soundness proofs use Mathlib's real exponential estimates.
 
-## Bounded P8 kernel checks
+Kernel reduction checks every field certificate in both frozen barriers:
+12,125 density occurrences and 9,089 signed jet occurrences. These include
+the reused main certificates; the unique reference gates number 7,849 and
+6,317 respectively. Source rows do not require P8 and are excluded by their
+certificate constructor, not by an unchecked selection flag.
 
-[ProfileChecks.lean](DBN/ProfileChecks.lean) proves four numerical inequalities:
+The final theorem is `DBN.Profile.profileCellGates_proved`. It proves exactly
+`s + 1/100000 < f0 p tl` and, for signed rows, `Cceil p tl tr ≤ c`.
+There is no native-evaluation fallback. It does **not** prove the analytic
+density/jet comparisons or nonvanishing of the actual heat flow.
+[FieldTransfer.lean](DBN/FieldTransfer.lean) remains a compositional lemma
+with an explicit P8 parameter; `GateChecker` now supplies that parameter.
 
-| Gate | Zero-based reference row |
-| --- | ---: |
-| Density, smallest margin found by the conventional interval audit | 1251 |
-| Density | 3356 |
-| Jet | 3356 |
-| Jet, smallest margin found by the conventional interval audit | 5845 |
+[ProfileChecks.lean](DBN/ProfileChecks.lean) retains independent kernel checks
+through leancert's interval evaluator: density rows 1251 and 3356, jet rows
+3356 and 5845, and the refutation of the earlier extra-subtraction condition
+at row 3356. The smallest observed density and jet margins are about
+`4e-12`. This separate module took about 17 seconds and 9.6 GiB.
 
-Their exact inputs are linked to the frozen row data by kernel-checked tuple
-equalities. Both smallest margins are approximately `4e-12`.
-The file also proves `overderated_3356_false`: the formerly printed stronger
-condition `s < fM p tl - 1/100000` is false at row 3356. The accepted checker
-gate and final bound are unchanged.
+### Finite head
 
-All five numerical statements use leancert with `trust := kernel`; there is
-no native fallback. Rechecking this module took about 17 seconds and peaked at
-9.6 GiB on the preparation machine. These checks cover only the listed gates,
-not all P8 rows. The complete P8 numerical verification is supplied by the
-separate Arb and mpmath certificate checkers.
+[Head.lean](DBN/Head.lean) proves `DBN.head_of_finiteRH`:
 
-## What remains assumed
+~~~lean
+FiniteRH → BoundaryNonvanishing →
+  ∀ t ∈ Set.Icc (0 : ℝ) (1 / 5), ∀ z : ℂ,
+    H t z = 0 → |z.re| ≤ Const.X → z.im = 0
+~~~
 
-`RemainingPremises` still contains positive-time confinement, the finite head,
-the source floors, and the field floors. The more explicit interface separates
-the last item into analytic P4/P5 and the full P8 endpoint list.
+`FiniteRH` is the time-zero statement in the `H)-coordinate.
+Since `H₀(z) = ξ((1+iz)/2)/8`, its corresponding zeta ordinate cutoff is
+`X/2 = 2999673670750`, not `X`. The cited Platt–Trudgian theorem and its
+identification with this formal proposition are still external inputs.
 
-[Confinement.lean](DBN/Confinement.lean) names
-`PolymathPositiveTimeRealTail`: there exists `C > 0` such that, for
-`0 < t ≤ 1/2`, every zero with `Re z ≥ exp(C/t)` is real. This is the
-real-zero conclusion of [Polymath, arXiv:1904.12438v2, Theorem 1.5(i)](https://arxiv.org/html/1904.12438v2).
-Lean proves the exact compact-time confinement consequence with
-`R = exp(C/t0)`, using the proved evenness for negative real parts.
-The literature theorem itself remains an explicit premise; it was not inserted
-as an axiom or represented as an already formalized proof.
+The proof uses [ZeroCount.lean](DBN/ZeroCount.lean), an argument principle
+derived from the existing Hadamard logarithmic-derivative formula;
+[HermiteRoots.lean](DBN/HermiteRoots.lean), giving the distinct real roots
+of the model polynomial; and [HermiteForward.lean](DBN/HermiteForward.lean),
+giving forward-time splitting. Local zero counts and conjugation imply
+reality; continuous induction covers the entire closed time interval.
 
-See the publication's [verification scope](../VERIFICATION.md) for the conventional
-analytic evidence and the unresolved formalization work.
+### Approximation and confinement
 
-## Audit and layout
+[Approximation.lean](DBN/Approximation.lean) defines the manuscript's functions
+and collects the residual estimate and nonzero normalizer into
+`EnlargedApproximation`. **This proposition is an assumption, not a proved
+approximation theorem.** It covers `x ≥ 5.9·10¹²`, `t ∈ [0,1/5]`,
+`y ∈ [0,7]`.
 
-[Audit.lean](Audit.lean) checks the exact headline types, prints the premise
-structures and transitive axiom dependencies, and uses `#assert_trust kernel`
-to reject proof holes, compiler/native dependencies, or unrecognized axioms in
-the audited declarations. The permitted foundations are `propext`,
-`Classical.choice`, and `Quot.sound`. This is not an axiom-free development.
+`BoundaryMainTermBound` assumes `|f^{[N]}(X+iy)| > 1/500` at every point
+of the continuous time-height rectangle. It is **not a Lean-checked grid**.
+The conventional argument derives it from the 800,000-cell polynomial check
+(C8) and the Taylor error (C7); formalizing that bridge and computation
+remains open. Lean proves that this assumption and `EnlargedApproximation`
+imply boundary nonvanishing, using a proved scalar error bound below `1/500`.
 
-| Files | Role |
-| --- | --- |
-| `Constants`, `Certificate`, `Data/*`, `Check` | Exact constants, data, gates and finite proofs |
-| `Barrier`, `Algebra`, `Kernels`, `FirstContact` | Barrier comparison and force inequalities |
-| `Heat`, `Identification`, `External`, `OmegaGap` | Concrete analytic objects and established formal components |
-| `ZeroBranch`, `Hermite`, `PairSum` | Zero dynamics |
-| `Confinement` | Precisely stated literature parameter and proved corollary |
-| `Profile`, `WallGeometry`, `FieldTransfer` | Profile calculus, geometry and exact P4/P5/P8 transfer |
-| `ProfileChecks` | Four difficult P8 gates and the misprinted-gate counterexample |
-| `Premises`, `Main` | Remaining hypotheses and conditional bound |
+[GammaEstimate.lean](DBN/GammaEstimate.lean) proves the coarse bound
+`|γ| ≤ exp(1/10) Q^(−y/2)` on `x ≥ X_e`, `t ∈ [0,1/5]`, `y ∈ [0,1]`.
+This is not the sharper full-domain estimate from the paper.
+
+[ConfineApprox.lean](DBN/ConfineApprox.lean) derives the exact confinement
+needed here, for zeros with `|Im z| ≥ 1/40` on a compact positive-time
+interval, from `EnlargedApproximation`. Its radius is
+`max X_e (4π exp(80/t₀))`. The finite heated sums are controlled only for
+`2 ≤ n ≤ N(x,t)`; no infinite positive-time heated series is invoked.
+This does not formalize the full Polymath real-zero tail theorem.
+
+The alternative [Confinement.lean](DBN/Confinement.lean) keeps that published
+tail proposition explicit and proves its required corollary.
+
+### Auxiliary source lemmas
+
+These are useful components, not a formal proof of the 26 source floors:
+
+- [ZetaBounds.lean](DBN/ZetaBounds.lean): the Euler-product modulus lower
+  bound and the **termwise** common-phase inequality underlying (C25).
+- [VonMangoldtSeries.lean](DBN/VonMangoldtSeries.lean): the absolutely
+  convergent Dirichlet series for `Φ_t = −ζ'/ζ − (t/4)(ζ''/ζ)'` on
+  `Re s > 1`. Its coefficients are nonnegative for `t ≥ 0`, and the
+  value modulus bound is proved. The derivative bound is not yet proved.
+- [HeatIdentity.lean](DBN/HeatIdentity.lean): the exact finite decomposition
+  (C13) for all real `t`, all natural cutoffs and `Re s > 1`, together
+  with a finite-remainder norm bound and an infinite-tail norm bound.
+  The latter requires `t ≥ 0`. The stronger uniform majorants (C14–C16),
+  derivative estimates, Cauchy reductions and final numerical gates remain open.
+
+## Remaining trust boundary
+
+The approximation-based headline still assumes `EnlargedApproximation`,
+`FiniteRH`, `BoundaryMainTermBound`, the source floors and the analytic
+density/jet comparisons. None is inserted as a project axiom.
+
+The audit checks 27 principal declarations and permits only `propext`,
+`Classical.choice` and `Quot.sound`. These foundational axioms are
+disclosed; their being the only axioms does not discharge explicit theorem
+hypotheses. See [verification scope](../VERIFICATION.md) for the conventional
+evidence supporting those hypotheses.

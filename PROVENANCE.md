@@ -26,9 +26,39 @@ must take responsibility for the submitted argument.
   formerly printed stronger P8 condition.
 - Added adversarial tests, complete-range checks, a reproduction image, a typeset
   paper, and an integrity-checked release exporter.
+- Proved every P8 endpoint gate in Lean with a verified rational fixed-point
+  evaluator (`lean/DBN/GateChecker.lean`), removing the P8 gate list from the
+  explicit premise interface.
+- Proved finite-head propagation in Lean (`lean/DBN/Head.lean`, with
+  `ZeroCount.lean`, `HermiteRoots.lean` and `HermiteForward.lean`): P2 follows
+  from the finite-RH input at `t = 0` and boundary nonvanishing. The original
+  main interface's full head field is preserved; the approximation interface
+  supplies it through this theorem.
+- Exposed the enlarged approximation and continuous boundary main-term bound
+  as explicit unproved inputs (`lean/DBN/Approximation.lean`), and proved their
+  boundary-nonvanishing consequence and a scalar error threshold. This does
+  not formalize the finite polynomial grid or its Taylor-error bridge.
+- Proved positive-time confinement from Lemma A.1 alone in Lean
+  (`lean/DBN/ConfineApprox.lean`, with the reflected-coefficient bound proved from
+  the definitions in `lean/DBN/GammaEstimate.lean`) and added the approximation
+  interface `DBN.lambda_le_bound_of_approximation`, which uses no literature tail
+  theorem.
+- Proved three ingredients of the source recipe in Lean: the Euler-product lower
+  bound for `|ζ(s)|` and the termwise common-phase inequality (C25)
+  (`lean/DBN/ZetaBounds.lean`), and the nonnegative-coefficient Dirichlet series
+  for `−ζ'/ζ − (t/4)(ζ''/ζ)'` (`lean/DBN/VonMangoldtSeries.lean`). The finite
+  heat identity and remainder norm bounds are also proved in
+  `lean/DBN/HeatIdentity.lean`. These are auxiliary results, not the complete
+  uniform source-floor proof.
 - Checked the native coefficient generator with memory/undefined-behavior
   instrumentation and independent small finite sums. Output failure paths now
   close files and release initialized objects before reporting failure.
+
+The additional formalization was drafted with Claude Code assistance and
+reviewed with Astra. Review corrected normalization and forward-time comments,
+distinguished continuous assumptions from finite certificates, and preserved
+the original main theorem's premise structure. Automated review is not external
+peer review.
 
 Earlier campaign records are preserved in the originating research workspace,
 outside this standalone package. They are not mathematical inputs. The

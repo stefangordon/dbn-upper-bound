@@ -1,7 +1,6 @@
 # de Bruijn–Newman upper bound
 
-
-**[Read the paper (PDF)](output/pdf/dbn-upper-bound.pdf?raw=1)** · [Paper source](manuscript/main.md) · [Verification guide](VERIFICATION.md)
+**[Download the paper (PDF)](https://github.com/stefangordon/dbn-upper-bound/releases/latest/download/dbn-upper-bound.pdf)** · [Paper source](manuscript/main.md) · [Verification guide](VERIFICATION.md) · [Releases](https://github.com/stefangordon/dbn-upper-bound/releases)
 
 Paper, exact certificates, reproducible computations, and a partial Lean 4
 formalization of the computer-assisted bound:
@@ -64,7 +63,8 @@ lake env lean Audit.lean
 
 Use a machine with at least 32 GiB RAM. Full kernel reduction of the rational
 certificate took about 13 minutes and reached roughly 15 GiB on the preparation
-machine. The [Lean guide](lean/README.md) gives the exact theorem interfaces,
+machine. The full P8 reduction is another substantial computation; budget about
+40 minutes. The [Lean guide](lean/README.md) gives the exact theorem interfaces,
 dependency pins, and remaining assumptions.
 
 ## Read the proof
@@ -100,3 +100,7 @@ The exporter checks the inventory and refuses existing destinations. It includes
 the paper and exact sources, and excludes build caches and local environments.
 The generated LaTeX source is in `build/paper/` after typesetting.
 `MANIFEST.json` fixes file identities; it does not certify mathematical claims.
+
+Published releases attach the PDF under the stable asset name
+`dbn-upper-bound.pdf`. The download link at the top follows the latest release;
+use a specific release's asset URL when citing an immutable version.
