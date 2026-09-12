@@ -1,7 +1,7 @@
 # de Bruijn–Newman upper bound
 
 
-**[Read the paper (PDF)](output/pdf/dbn-upper-bound.pdf)** · [Paper source](manuscript/main.md) · [Verification guide](VERIFICATION.md)
+**[Read the paper (PDF)](output/pdf/dbn-upper-bound.pdf?raw=1)** · [Paper source](manuscript/main.md) · [Verification guide](VERIFICATION.md)
 
 Paper, exact certificates, reproducible computations, and a partial Lean 4
 formalization of the computer-assisted bound:
