@@ -1,6 +1,5 @@
 # de Bruijn–Newman upper bound
 
-Stefan Gordon
 
 **[Read the paper (PDF)](output/pdf/dbn-upper-bound.pdf)** · [Paper source](manuscript/main.md) · [Verification guide](VERIFICATION.md)
 
