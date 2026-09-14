@@ -1,6 +1,6 @@
 # de Bruijn–Newman upper bound
 
-**[Download the paper (PDF)](https://github.com/stefangordon/dbn-upper-bound/releases/latest/download/dbn-upper-bound.pdf)** · [Paper source](manuscript/main.md) · [Verification guide](VERIFICATION.md) · [Releases](https://github.com/stefangordon/dbn-upper-bound/releases)
+**[Read in browser](https://stefangordon.github.io/dbn-upper-bound/dbn-upper-bound.pdf)** · [Download PDF](https://github.com/stefangordon/dbn-upper-bound/releases/latest/download/dbn-upper-bound.pdf) · [Paper source](manuscript/main.md) · [Verification guide](VERIFICATION.md) · [Releases](https://github.com/stefangordon/dbn-upper-bound/releases)
 
 Paper, exact certificates, reproducible computations, and a partial Lean 4
 formalization of the computer-assisted bound:
@@ -102,5 +102,11 @@ The generated LaTeX source is in `build/paper/` after typesetting.
 `MANIFEST.json` fixes file identities; it does not certify mathematical claims.
 
 Published releases attach the PDF under the stable asset name
-`dbn-upper-bound.pdf`. The download link at the top follows the latest release;
+`dbn-upper-bound.pdf`. The download link follows the latest release;
 use a specific release's asset URL when citing an immutable version.
+
+The browser link serves the current PDF from GitHub Pages. On pushes to
+`main`, the Pages workflow verifies the manifest and PDF/source identities,
+then publishes the existing `output/pdf/dbn-upper-bound.pdf` with the small
+entry point in `docs/index.html`. There is no second checked-in PDF to keep
+in sync. Browser settings that force PDF downloads can still override viewing.

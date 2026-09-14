@@ -63,7 +63,8 @@ def release_files(root=ROOT):
             if (
                 path.suffix in EXTENSIONS
                 or path.name in SPECIAL
-                or relative.as_posix() == "output/pdf/dbn-upper-bound.pdf"
+                or relative.as_posix()
+                in {"output/pdf/dbn-upper-bound.pdf", "docs/index.html"}
             ):
                 files.append(relative.as_posix())
             elif path.name not in {".DS_Store"} and path.suffix not in {".pyc", ".pyo", ".png"}:

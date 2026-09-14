@@ -1,0 +1,51 @@
+name: Publish browser-readable paper
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'output/pdf/**'
+      - 'manuscript/**'
+      - 'docs/**'
+      - 'scripts/build_paper.py'
+      - 'scripts/manifest.py'
+      - 'MANIFEST.json'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - name: Verify release integrity and PDF freshness
+        run: |
+          python3 scripts/manifest.py
+          python3 scripts/build_paper.py --check-pdf
+      - name: Stage only the paper and its entry point
+        run: |
+          mkdir -p dist/pages
+          cp output/pdf/dbn-upper-bound.pdf dist/pages/
+          cp docs/index.html dist/pages/
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: dist/pages
+      - name: Publish to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1

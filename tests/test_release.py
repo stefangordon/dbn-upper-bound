@@ -66,6 +66,7 @@ class ReleaseContentsTests(unittest.TestCase):
     def test_required_workflows_and_sources_are_in_inventory(self):
         expected = {
             ".github/workflows/verify.yml", ".github/workflows/lean.yml", "Dockerfile",
+            ".github/workflows/pages.yml", "docs/index.html",
             "verify.py", "requirements.txt", "lean/Audit.lean", "lean/lake-manifest.json",
             "manuscript/main.md", "manuscript/analytic-estimates.md",
             "manuscript/computational-estimates.md", "manuscript/source-boxes.md",
@@ -78,6 +79,21 @@ class ReleaseContentsTests(unittest.TestCase):
 
     def test_printed_source_table_matches_exact_catalog(self):
         self.assertEqual((ROOT / "manuscript/source-boxes.md").read_text(), paper.source_table())
+
+    def test_browser_and_download_links_are_distinct(self):
+        links = markdown_links((ROOT / "README.md").read_text())
+        browser = "https://stefangordon.github.io/dbn-upper-bound/dbn-upper-bound.pdf"
+        download = "https://github.com/stefangordon/dbn-upper-bound/releases/latest/download/dbn-upper-bound.pdf"
+        self.assertIn(browser, links)
+        self.assertIn(download, links)
+        self.assertLess(links.index(browser), links.index(download))
+
+    def test_pages_entrypoint_targets_the_canonical_pdf(self):
+        entry = (ROOT / "docs/index.html").read_text()
+        target = "dbn-upper-bound.pdf"
+        self.assertTrue((ROOT / "output/pdf" / target).is_file())
+        self.assertIn('content="0; url=' + target + '"', entry)
+        self.assertEqual(set(re.findall(r'href="([^"]+)"', entry)), {target})
 
 
 class InventoryBoundaryTests(unittest.TestCase):

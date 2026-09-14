@@ -11,6 +11,10 @@
       "sha256": "d7a1328c74d4d427acfdba5fa391f36968809e067a1cdabf505449ab40095739",
       "bytes": 781
     },
+    ".github/workflows/pages.yml": {
+      "sha256": "d9939da2a78c453d7ad79053c77b5b451b6a46bc9b470dd02604f95b0296090e",
+      "bytes": 1399
+    },
     ".github/workflows/verify.yml": {
       "sha256": "a3d7a540419b9d3c1c0556a68aef24db2fea01660eccaa8b3f7fd6edd7f261c4",
       "bytes": 656
@@ -36,8 +40,8 @@
       "bytes": 5495
     },
     "README.md": {
-      "sha256": "cdd6b26e1359dca2722c82fafd71086b6ac0b3f96da64043c12172c8cfd98973",
-      "bytes": 4492
+      "sha256": "5c8978e3e16045cf3732d3d12c4e8bbb949cd304200ad56d734052f373aceae0",
+      "bytes": 4938
     },
     "VERIFICATION.md": {
       "sha256": "34877d6048bc306059f1ba223eb14a2fba503e2d14c161e679843fe0bd01978a",
@@ -70,6 +74,10 @@
     "certificate/verify.py": {
       "sha256": "88f68449851ea10fde39feae38dc5bbac1d28bde5b716f10b220ec6b27776fd5",
       "bytes": 2462
+    },
+    "docs/index.html": {
+      "sha256": "f14f47f32b9b061d08702e9a1ef15a087ac3673486c6566099b497153cbed906",
+      "bytes": 408
     },
     "lean/.gitignore": {
       "sha256": "9ca1079da1eb805f0cdf26d0de3f2320e28e2d1cb2dfaf3afad0178aafbabc7b",
@@ -396,8 +404,8 @@
       "bytes": 2681
     },
     "scripts/manifest.py": {
-      "sha256": "e7d1b4185430d4a389c95cc48245f53446c916104b9d8cb6b1a7315509324cad",
-      "bytes": 3500
+      "sha256": "ab79ec9de3908bf4f2e8584626764cefc34c9da220ca1dee7d924a430bc998be",
+      "bytes": 3537
     },
     "support/fields/README.md": {
       "sha256": "1cd6922155e4b0154104d177ddafa78170d22d962fd70739f76c6eee0d95647d",
@@ -516,8 +524,8 @@
       "bytes": 4741
     },
     "tests/test_release.py": {
-      "sha256": "1e1f979cd4aace57bb871f527d317b376c98bf10300781843d3fc4bef3ce3139",
-      "bytes": 5072
+      "sha256": "3d56f3665c8b578475f1d9cba31825bac4487a802a29b4973ff59e403ae37ef0",
+      "bytes": 5973
     },
     "tests/test_runner.py": {
       "sha256": "08db4d2693dba28d6af624f3fe7f1042339b605939260e021b5e526d31abd84b",
