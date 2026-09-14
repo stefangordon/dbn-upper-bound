@@ -1,10 +1,9 @@
 # Provenance and release information
 
 The initial research and drafts were produced in September 2026 with AI
-assistance. This preparation used Astra reviewers for independent mathematical
+assistance. This preparation used GPT-6 Astra reviewers for independent mathematical
 reconstruction, numerical replay, and formalization. Automated review is not
-external peer review, and models are not listed as paper authors. Human authors
-must take responsibility for the submitted argument.
+external peer review, and models are not listed as paper authors.
 
 ## Preparation changes
 
@@ -57,14 +56,7 @@ must take responsibility for the submitted argument.
 The additional formalization was drafted with Claude Code assistance and
 reviewed with Astra. Review corrected normalization and forward-time comments,
 distinguished continuous assumptions from finite certificates, and preserved
-the original main theorem's premise structure. Automated review is not external
-peer review.
-
-Earlier campaign records are preserved in the originating research workspace,
-outside this standalone package. They are not mathematical inputs. The
-preparation record identifies the original revision and an archived copy of
-the previous package. No transcripts, credentials, virtual environments, or
-compiled Lean dependencies are included in the release.
+the original main theorem's premise structure. 
 
 ## External material
 
@@ -87,10 +79,3 @@ the checkers.
 
 The repository is [stefangordon/dbn-upper-bound](https://github.com/stefangordon/dbn-upper-bound).
 
-The manuscript names Stefan Gordon as its author, as explicitly supplied by
-the author. No affiliation, ORCID, or correspondence address has been inferred.
-Release licensing remains a separate repository decision.
-
-A public release should receive a stable tag and archival identifier when its
-authors approve it. External peer review, priority assessment, and journal
-acceptance remain separate from the local checks described here.
