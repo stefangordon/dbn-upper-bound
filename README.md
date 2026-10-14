@@ -1,6 +1,6 @@
 # de Bruijn–Newman upper bound
 
-**[Read in browser](https://stefangordon.github.io/dbn-upper-bound/dbn-upper-bound.pdf)** · [Download PDF](https://github.com/stefangordon/dbn-upper-bound/releases/latest/download/dbn-upper-bound.pdf) · [Paper source](manuscript/main.md) · [Verification guide](VERIFICATION.md) · [Releases](https://github.com/stefangordon/dbn-upper-bound/releases)
+**[View Paper (SSRN)](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7608638)** · [Download PDF](https://github.com/stefangordon/dbn-upper-bound/releases/latest/download/dbn-upper-bound.pdf) · [Paper source](manuscript/main.md) · [Verification guide](VERIFICATION.md) · [Releases](https://github.com/stefangordon/dbn-upper-bound/releases)
 
 Paper, exact certificates, reproducible computations, and a partial Lean 4
 formalization of the computer-assisted bound:
